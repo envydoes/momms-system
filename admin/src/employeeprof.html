@@ -1,0 +1,327 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Employee prof  </title>
+  <script src="https://cdn.tailwindcss.com">
+    
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+   body.modal-open {
+    overflow: hidden;
+   }
+  </style>
+ </head>
+ <body>
+  <div class="flex min-h-screen">
+   <!-- Sidebar -->
+   <aside class="bg-[#c62839] w-72 flex flex-col items-center py-8 rounded-tr-3xl rounded-br-3xl select-none">
+    <div class="flex items-center mb-10 w-full px-6">
+        <a href="employeedashboard.html" class="text-white font-bold text-lg flex items-center">
+         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+         </svg>
+          Home
+        </a>
+       </div>
+    <img alt="Momms Cafe logo" class="w-36 h-36 rounded-full mb-8" height="150" src="LOGO.png" width="150"/>
+    <nav class="w-full flex flex-col gap-8 px-6">
+     <a class="text-yellow-500 text-white font-extrabold text-lg text-center uppercase hover:underline" href="employee_page.html">Profile</a>
+     <a class="text-white font-bold text-lg text-center uppercase hover:underline" href="ricemenu.html">Orders</a>
+     <a class="text-white font-bold text-lg text-center uppercase hover:underline" href="transaction.html">Transaction</a>
+     <a class="text-white font-bold text-lg text-center uppercase hover:underline" href="employeelog.html">Logout</a>
+    </nav>
+   </aside>
+
+   <div class="max-w-6xl mx-auto p-6 bg-white rounded-xl mt-10 relative z-0 flex-1" id="profile-container">
+    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-12">
+     <img alt="Portrait photo of a young man with short black hair, wearing a white shirt, smiling slightly" class="w-[100px] h-[100px] rounded-full object-cover" height="100" id="profile-photo" src="https://storage.googleapis.com/a1aa/image/189d7725-a459-4ffd-4842-736311094f61.jpg" width="100"/>
+     <div class="text-center sm:text-left">
+      <h1 class="font-extrabold text-3xl leading-tight" id="profile-name">
+       Romnick T. Gallardo
+      </h1>
+      <p class="text-lg leading-snug" id="profile-email">
+       Email: romnickgallardo@gmail.com
+      </p>
+      <p class="text-lg leading-snug" id="profile-phone">
+       Phone: +63 912-788-6567
+      </p>
+     </div>
+    </div>
+    <hr class="border-red-600 border-[1.5px] my-6"/>
+    <div class="flex flex-col sm:flex-row justify-between gap-10">
+     <div class="sm:w-1/2">
+      <h2 class="font-bold text-xl mb-4">
+       Personal Information
+      </h2>
+      <p class="mb-6 text-lg leading-relaxed" id="profile-relationship">
+       Relationship: Married
+      </p>
+      <p class="mb-6 text-lg leading-relaxed" id="profile-nationality">
+       Nationality: Filipino
+      </p>
+      <p class="mb-6 text-lg leading-relaxed" id="profile-sex">
+       Sex: Male
+      </p>
+      <p class="mb-6 text-lg leading-relaxed" id="profile-dob">
+       Date of Birth: November 1, 2000
+      </p>
+      <p class="mb-6 text-lg leading-relaxed" id="profile-address">
+       Address: Tagilid st, Cabanatuan City, Nueva Ecija
+      </p>
+     </div>
+     <div class="sm:w-1/2">
+      <h2 class="font-bold text-xl mb-4">
+       Employment Details
+      </h2>
+      <p class="mb-6 text-lg leading-relaxed" id="profile-employed-date">
+       Employed Date: Febuary 15, 2025
+      </p>
+      <p class="mb-6 text-lg leading-relaxed" id="profile-role">
+       Role: Cashier
+      </p>
+      <p class="mb-6 text-lg leading-relaxed" id="profile-employment-type">
+       Employment type: Full time
+      </p>
+      <p class="mb-6 text-lg leading-relaxed" id="profile-shift-schedule">
+       Shift Schedule: 6 Days a week
+      </p>
+      <p class="mb-6 text-lg leading-relaxed" id="profile-branch-location">
+       Branch Locaton: (MAIN BRANCH), Mayapyap, Cabanatuan City, Nueva Ecija
+      </p>
+     </div>
+    </div>
+    <div class="flex justify-end gap-6 mt-6">
+     
+     <button id="editBtn" class="bg-red-700 text-white font-semibold px-16 py-3 rounded-md">
+      Edit
+     </button>
+    </div>
+   </div>
+  </div>
+
+  <!-- Overlay Modal -->
+  <div id="editOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+   <div class="bg-white rounded-xl max-w-3xl w-full p-8 relative max-h-[90vh] overflow-y-auto">
+    <h2 class="text-2xl font-bold mb-6 text-center">Edit Profile</h2>
+    <form id="editForm" class="space-y-6">
+     <div class="flex flex-col sm:flex-row gap-6">
+      <div class="sm:w-1/3 flex flex-col items-center">
+       <img alt="Portrait photo preview" id="edit-photo-preview" class="w-[100px] h-[100px] rounded-full object-cover mb-4" src="https://storage.googleapis.com/a1aa/image/189d7725-a459-4ffd-4842-736311094f61.jpg"/>
+       <input type="file" id="uploadImage" accept="image/*" class="mt-2 text-sm" />
+      </div>
+      <div class="sm:w-2/3 space-y-4">
+       <div>
+        <label class="block font-semibold mb-1" for="edit-name">Name</label>
+        <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-name" type="text" required/>
+       </div>
+       <div>
+        <label class="block font-semibold mb-1" for="edit-email">Email</label>
+        <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-email" type="email" required/>
+       </div>
+       <div>
+        <label class="block font-semibold mb-1" for="edit-phone">Phone</label>
+        <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-phone" type="tel" required/>
+       </div>
+      </div>
+     </div>
+
+     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div>
+       <label class="block font-semibold mb-1" for="edit-relationship">Relationship</label>
+       <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-relationship" type="text" required/>
+      </div>
+      <div>
+       <label class="block font-semibold mb-1" for="edit-employed-date">Employed Date</label>
+       <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-employed-date" type="text" required/>
+      </div>
+      <div>
+       <label class="block font-semibold mb-1" for="edit-nationality">Nationality</label>
+       <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-nationality" type="text" required/>
+      </div>
+      <div>
+       <label class="block font-semibold mb-1" for="edit-role">Role</label>
+       <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-role" type="text" required/>
+      </div>
+      <div>
+       <label class="block font-semibold mb-1" for="edit-sex">Sex</label>
+       <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-sex" type="text" required/>
+      </div>
+      <div>
+       <label class="block font-semibold mb-1" for="edit-employment-type">Employment Type</label>
+       <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-employment-type" type="text" required/>
+      </div>
+      <div>
+       <label class="block font-semibold mb-1" for="edit-dob">Date of Birth</label>
+       <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-dob" type="text" required/>
+      </div>
+      <div>
+       <label class="block font-semibold mb-1" for="edit-shift-schedule">Shift Schedule</label>
+       <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-shift-schedule" type="text" required/>
+      </div>
+      <div class="sm:col-span-2">
+       <label class="block font-semibold mb-1" for="edit-address">Address</label>
+       <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-address" type="text" required/>
+      </div>
+      <div class="sm:col-span-2">
+       <label class="block font-semibold mb-1" for="edit-branch-location">Branch Location</label>
+       <input class="border border-gray-300 rounded-md px-3 py-2 w-full" id="edit-branch-location" type="text" required/>
+      </div>
+     </div>
+
+     <div class="flex justify-end gap-4 mt-6">
+      <button type="button" id="cancelBtn" class="bg-gray-300 text-gray-700 font-semibold px-6 py-3 rounded-md">
+       Cancel
+      </button>
+      <button type="submit" class="bg-red-700 text-white font-semibold px-6 py-3 rounded-md">
+       Save
+      </button>
+     </div>
+    </form>
+   </div>
+  </div>
+
+  <script>
+   const editBtn = document.getElementById('editBtn');
+   const editOverlay = document.getElementById('editOverlay');
+   const cancelBtn = document.getElementById('cancelBtn');
+   const editForm = document.getElementById('editForm');
+
+   // Elements to update
+   const profilePhoto = document.getElementById('profile-photo');
+   const profileName = document.getElementById('profile-name');
+   const profileEmail = document.getElementById('profile-email');
+   const profilePhone = document.getElementById('profile-phone');
+   const profileRelationship = document.getElementById('profile-relationship');
+   const profileNationality = document.getElementById('profile-nationality');
+   const profileSex = document.getElementById('profile-sex');
+   const profileDob = document.getElementById('profile-dob');
+   const profileAddress = document.getElementById('profile-address');
+   const profileEmployedDate = document.getElementById('profile-employed-date');
+   const profileRole = document.getElementById('profile-role');
+   const profileEmploymentType = document.getElementById('profile-employment-type');
+   const profileShiftSchedule = document.getElementById('profile-shift-schedule');
+   const profileBranchLocation = document.getElementById('profile-branch-location');
+
+   // Form inputs
+   const inputPhotoPreview = document.getElementById('edit-photo-preview');
+   const inputName = document.getElementById('edit-name');
+   const inputEmail = document.getElementById('edit-email');
+   const inputPhone = document.getElementById('edit-phone');
+   const inputRelationship = document.getElementById('edit-relationship');
+   const inputNationality = document.getElementById('edit-nationality');
+   const inputSex = document.getElementById('edit-sex');
+   const inputDob = document.getElementById('edit-dob');
+   const inputAddress = document.getElementById('edit-address');
+   const inputEmployedDate = document.getElementById('edit-employed-date');
+   const inputRole = document.getElementById('edit-role');
+   const inputEmploymentType = document.getElementById('edit-employment-type');
+   const inputShiftSchedule = document.getElementById('edit-shift-schedule');
+   const inputBranchLocation = document.getElementById('edit-branch-location');
+
+   const uploadImageInput = document.getElementById('uploadImage');
+
+   // Open overlay and populate form with current values (without setting photo URL input)
+   editBtn.addEventListener('click', () => {
+    inputPhotoPreview.src = profilePhoto.src;
+    inputName.value = profileName.textContent.trim();
+    inputEmail.value = profileEmail.textContent.replace('Email: ', '').trim();
+    inputPhone.value = profilePhone.textContent.replace('Phone: ', '').trim();
+    inputRelationship.value = profileRelationship.textContent.replace('Relationship: ', '').trim();
+    inputNationality.value = profileNationality.textContent.replace('Nationality: ', '').trim();
+    inputSex.value = profileSex.textContent.replace('Sex: ', '').trim();
+    inputDob.value = profileDob.textContent.replace('Date of Birth: ', '').trim();
+    inputAddress.value = profileAddress.textContent.replace('Address: ', '').trim();
+    inputEmployedDate.value = profileEmployedDate.textContent.replace('Employed Date: ', '').trim();
+    inputRole.value = profileRole.textContent.replace('Role: ', '').trim();
+    inputEmploymentType.value = profileEmploymentType.textContent.replace('Employment type: ', '').trim();
+    inputShiftSchedule.value = profileShiftSchedule.textContent.replace('Shift Schedule: ', '').trim();
+    inputBranchLocation.value = profileBranchLocation.textContent.replace('Branch Locaton: ', '').trim();
+
+    editOverlay.classList.remove('hidden');
+    document.body.classList.add('modal-open');
+   });
+
+   // Upload image file and preview
+   uploadImageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+     const reader = new FileReader();
+     reader.onload = function(event) {
+      inputPhotoPreview.src = event.target.result;
+     };
+     reader.readAsDataURL(file);
+    }
+   });
+
+   // Cancel button closes overlay with SweetAlert confirmation
+   cancelBtn.addEventListener('click', () => {
+    Swal.fire({
+     title: 'Discard changes?',
+     text: "Your changes will not be saved.",
+     icon: 'warning',
+     showCancelButton: true,
+     confirmButtonColor: '#c62839',
+     cancelButtonColor: '#6b7280',
+     confirmButtonText: 'Discard',
+     cancelButtonText: 'Keep Editing'
+    }).then((result) => {
+     if (result.isConfirmed) {
+      editOverlay.classList.add('hidden');
+      document.body.classList.remove('modal-open');
+     }
+    });
+   });
+
+   // Submit form and update profile text and photo with SweetAlert confirmation
+   editForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    Swal.fire({
+     title: 'Save changes?',
+     icon: 'question',
+     showCancelButton: true,
+     confirmButtonColor: '#c62839',
+     cancelButtonColor: '#6b7280',
+     confirmButtonText: 'Save',
+     cancelButtonText: 'Cancel'
+    }).then((result) => {
+     if (result.isConfirmed) {
+      profilePhoto.src = inputPhotoPreview.src || profilePhoto.src;
+      profileName.textContent = inputName.value.trim();
+      profileEmail.textContent = 'Email: ' + inputEmail.value.trim();
+      profilePhone.textContent = 'Phone: ' + inputPhone.value.trim();
+      profileRelationship.textContent = 'Relationship: ' + inputRelationship.value.trim();
+      profileNationality.textContent = 'Nationality: ' + inputNationality.value.trim();
+      profileSex.textContent = 'Sex: ' + inputSex.value.trim();
+      profileDob.textContent = 'Date of Birth: ' + inputDob.value.trim();
+      profileAddress.textContent = 'Address: ' + inputAddress.value.trim();
+      profileEmployedDate.textContent = 'Employed Date: ' + inputEmployedDate.value.trim();
+      profileRole.textContent = 'Role: ' + inputRole.value.trim();
+      profileEmploymentType.textContent = 'Employment type: ' + inputEmploymentType.value.trim();
+      profileShiftSchedule.textContent = 'Shift Schedule: ' + inputShiftSchedule.value.trim();
+      profileBranchLocation.textContent = 'Branch Locaton: ' + inputBranchLocation.value.trim();
+
+      editOverlay.classList.add('hidden');
+      document.body.classList.remove('modal-open');
+
+      Swal.fire({
+       icon: 'success',
+       title: 'Saved!',
+       timer: 1500,
+       showConfirmButton: false
+      });
+     }
+    });
+   });
+
+   // Close overlay on clicking outside modal content
+   editOverlay.addEventListener('click', (e) => {
+    if (e.target === editOverlay) {
+     cancelBtn.click();
+    }
+   });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,289 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Owner Login
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js">
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js">
+  </script>
+  <style>
+   @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+    body {
+      font-family: "Inter", sans-serif;
+    }
+  </style>
+ </head>
+ <body class="bg-[#b22222] min-h-screen flex items-center justify-center p-6 relative">
+  <div class="flex flex-col md:flex-row w-full max-w-4xl rounded-3xl overflow-hidden shadow-lg z-10 bg-white">
+   <!-- Left side -->
+   <div class="bg-[#d9d9d9] flex flex-col justify-center items-center flex-1 p-10 md:p-16 rounded-t-3xl md:rounded-l-3xl md:rounded-tr-none">
+    <h1 class="text-4xl font-extrabold mb-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.4)] text-[#b22222]">
+   Owner Login
+    </h1>
+    <form autocomplete="off" class="w-full max-w-md space-y-6" id="loginForm">
+     <div class="relative">
+      <input autocomplete="email" class="w-full rounded-md bg-[#a9a9a9] text-gray-700 placeholder-gray-600 py-3 pr-12 pl-4 shadow-md focus:outline-none focus:ring-2 focus:ring-[#b22222]" id="loginEmail" name="email" placeholder="Email" required="" type="email"/>
+      <i class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-gray-700">
+      </i>
+     </div>
+     <div class="relative">
+      <input autocomplete="current-password" class="w-full rounded-md bg-[#a9a9a9] text-gray-700 placeholder-gray-600 py-3 pr-12 pl-4 shadow-md focus:outline-none focus:ring-2 focus:ring-[#b22222]" id="loginPassword" name="password" placeholder="Password" required="" type="password"/>
+      <i class="fas fa-eye-slash absolute right-4 top-1/2 -translate-y-1/2 text-gray-700 cursor-pointer" id="togglePassword">
+      </i>
+     </div>
+     <div class="flex justify-between text-gray-600 text-sm -mt-4 mb-4 select-none">
+      <button class="underline hover:text-[#b22222] transition" id="forgotBtn" type="button">
+       Forgot Password?
+      </button>
+      <button class="underline hover:text-[#b22222] transition" id="signupBtn" type="button">
+       Sign Up
+      </button>
+     </div>
+     <a href="overview.html">
+	 <button class="w-full bg-[#d92036] hover:bg-[#c31a2e] text-white font-bold py-3 rounded-lg shadow-md transition-shadow active:shadow-none" type="submit">
+      Login
+     </button>
+	 </a>
+    </form>
+   </div>
+   <!-- Right side -->
+   <div class="bg-[#c72434] flex flex-col justify-center items-center flex-1 p-10 md:p-16 rounded-b-3xl md:rounded-r-3xl md:rounded-bl-none text-white">
+    <img alt="Circular logo of a woman with brown hair wearing a red shirt with text MOMMS and food items around" class="w-36 h-36 rounded-full mb-8" height="150" src="images/LOGO.png" width="150"/>
+    <h2 class="text-2xl font-extrabold mb-8 text-center leading-snug">
+     Welcome to Momms
+     <br/>
+     food and great
+    </h2>
+    <div class="border border-white rounded-md px-4 py-2 cursor-pointer hover:bg-white hover:text-[#c72434] transition text-center select-none" onclick="location.href='employeelog.html'">
+     Login as Employee?
+    </div>
+   </div>
+  </div>
+  <!-- Overlay Modal for Forgot Password -->
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-6 hidden z-20" id="forgotModal">
+   <div aria-labelledby="forgotTitle" aria-modal="true" class="bg-white rounded-3xl max-w-md w-full p-8 relative shadow-lg" role="dialog">
+    <button aria-label="Close forgot password modal" class="absolute top-4 right-4 text-gray-600 hover:text-gray-900 text-2xl font-bold" id="forgotClose">
+     ×
+    </button>
+    <h3 class="text-3xl font-extrabold mb-6 text-[#b22222] text-center" id="forgotTitle">
+     Reset Password
+    </h3>
+    <form autocomplete="off" class="space-y-6" id="forgotForm">
+     <div class="relative">
+      <input autocomplete="email" class="w-full rounded-md bg-[#a9a9a9] text-gray-700 placeholder-gray-600 py-3 pl-4 shadow-md focus:outline-none focus:ring-2 focus:ring-[#b22222]" id="forgotEmail" name="forgotEmail" placeholder="Enter your email" required="" type="email"/>
+      <i class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-gray-700">
+      </i>
+     </div>
+     <button class="w-full bg-[#d92036] hover:bg-[#c31a2e] text-white font-bold py-3 rounded-lg shadow-md transition-shadow active:shadow-none" type="submit">
+      Send Reset Link
+     </button>
+    </form>
+    <p class="mt-4 text-center text-sm font-semibold text-green-600 hidden" id="forgotMessage">
+    </p>
+    <p class="mt-4 text-center text-sm font-semibold text-red-600 hidden" id="forgotError">
+    </p>
+   </div>
+  </div>
+  <!-- Overlay Modal for Sign Up -->
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-6 hidden z-20" id="signupModal">
+   <div aria-labelledby="signupTitle" aria-modal="true" class="bg-white rounded-3xl max-w-md w-full p-8 relative shadow-lg" role="dialog">
+    <button aria-label="Close signup modal" class="absolute top-4 right-4 text-gray-600 hover:text-gray-900 text-2xl font-bold" id="signupClose">
+     ×
+    </button>
+    <h3 class="text-3xl font-extrabold mb-6 text-[#b22222] text-center" id="signupTitle">
+     Create Account
+    </h3>
+    <form autocomplete="off" class="space-y-6" id="signupForm">
+     <div class="relative">
+      <input autocomplete="email" class="w-full rounded-md bg-[#a9a9a9] text-gray-700 placeholder-gray-600 py-3 pl-4 shadow-md focus:outline-none focus:ring-2 focus:ring-[#b22222]" id="signupEmail" name="signupEmail" placeholder="Email" required="" type="email"/>
+      <i class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-gray-700">
+      </i>
+     </div>
+     <div class="relative">
+      <input autocomplete="new-password" class="w-full rounded-md bg-[#a9a9a9] text-gray-700 placeholder-gray-600 py-3 pl-4 shadow-md focus:outline-none focus:ring-2 focus:ring-[#b22222]" id="signupPassword" minlength="6" name="signupPassword" placeholder="Password (min 6 chars)" required="" type="password"/>
+      <i class="fas fa-eye-slash absolute right-4 top-1/2 -translate-y-1/2 text-gray-700 cursor-pointer" id="toggleSignupPassword">
+      </i>
+     </div>
+     <button class="w-full bg-[#d92036] hover:bg-[#c31a2e] text-white font-bold py-3 rounded-lg shadow-md transition-shadow active:shadow-none" type="submit">
+      Sign Up
+     </button>
+    </form>
+    <p class="mt-4 text-center text-sm font-semibold text-green-600 hidden" id="signupMessage">
+    </p>
+    <p class="mt-4 text-center text-sm font-semibold text-red-600 hidden" id="signupError">
+    </p>
+   </div>
+  </div>
+  <script>
+   // Firebase configuration - replace with your own Firebase project config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-EXAMPLE-API-KEY-REPLACE-THIS",
+      authDomain: "your-project-id.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project-id.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdef123456",
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Toggle password visibility for login
+    const togglePassword = document.getElementById("togglePassword");
+    const loginPassword = document.getElementById("loginPassword");
+    togglePassword.addEventListener("click", () => {
+      const type =
+        loginPassword.getAttribute("type") === "password" ? "text" : "password";
+      loginPassword.setAttribute("type", type);
+      togglePassword.classList.toggle("fa-eye");
+      togglePassword.classList.toggle("fa-eye-slash");
+    });
+
+    // Toggle password visibility for signup
+    const toggleSignupPassword = document.getElementById("toggleSignupPassword");
+    const signupPassword = document.getElementById("signupPassword");
+    toggleSignupPassword.addEventListener("click", () => {
+      const type =
+        signupPassword.getAttribute("type") === "password" ? "text" : "password";
+      signupPassword.setAttribute("type", type);
+      toggleSignupPassword.classList.toggle("fa-eye");
+      toggleSignupPassword.classList.toggle("fa-eye-slash");
+    });
+
+    // Modal elements
+    const forgotModal = document.getElementById("forgotModal");
+    const signupModal = document.getElementById("signupModal");
+    const forgotBtn = document.getElementById("forgotBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const forgotClose = document.getElementById("forgotClose");
+    const signupClose = document.getElementById("signupClose");
+
+    // Show forgot password modal
+    forgotBtn.addEventListener("click", () => {
+      forgotModal.classList.remove("hidden");
+    });
+
+    // Show signup modal
+    signupBtn.addEventListener("click", () => {
+      signupModal.classList.remove("hidden");
+    });
+
+    // Close modals
+    forgotClose.addEventListener("click", () => {
+      forgotModal.classList.add("hidden");
+      clearForgotMessages();
+      document.getElementById("forgotForm").reset();
+    });
+    signupClose.addEventListener("click", () => {
+      signupModal.classList.add("hidden");
+      clearSignupMessages();
+      document.getElementById("signupForm").reset();
+    });
+
+    // Close modals on outside click
+    window.addEventListener("click", (e) => {
+      if (e.target === forgotModal) {
+        forgotModal.classList.add("hidden");
+        clearForgotMessages();
+        document.getElementById("forgotForm").reset();
+      }
+      if (e.target === signupModal) {
+        signupModal.classList.add("hidden");
+        clearSignupMessages();
+        document.getElementById("signupForm").reset();
+      }
+    });
+
+    // Login form submit
+    const loginForm = document.getElementById("loginForm");
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      auth
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          alert("Login successful!");
+          loginForm.reset();
+        })
+        .catch((error) => {
+          alert("Login failed: " + error.message);
+        });
+    });
+
+    // Forgot password form submit
+    const forgotForm = document.getElementById("forgotForm");
+    const forgotMessage = document.getElementById("forgotMessage");
+    const forgotError = document.getElementById("forgotError");
+
+    function clearForgotMessages() {
+      forgotMessage.classList.add("hidden");
+      forgotError.classList.add("hidden");
+      forgotMessage.textContent = "";
+      forgotError.textContent = "";
+    }
+
+    forgotForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      clearForgotMessages();
+      const email = document.getElementById("forgotEmail").value.trim();
+
+      auth
+        .sendPasswordResetEmail(email)
+        .then(() => {
+          forgotMessage.textContent =
+            "Password reset email sent! Please check your inbox.";
+          forgotMessage.classList.remove("hidden");
+          forgotError.classList.add("hidden");
+          forgotForm.reset();
+        })
+        .catch((error) => {
+          forgotError.textContent = error.message;
+          forgotError.classList.remove("hidden");
+          forgotMessage.classList.add("hidden");
+        });
+    });
+
+    // Signup form submit
+    const signupForm = document.getElementById("signupForm");
+    const signupMessage = document.getElementById("signupMessage");
+    const signupError = document.getElementById("signupError");
+
+    function clearSignupMessages() {
+      signupMessage.classList.add("hidden");
+      signupError.classList.add("hidden");
+      signupMessage.textContent = "";
+      signupError.textContent = "";
+    }
+
+    signupForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      clearSignupMessages();
+      const email = document.getElementById("signupEmail").value.trim();
+      const password = document.getElementById("signupPassword").value;
+
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          signupMessage.textContent = "Account created successfully!";
+          signupMessage.classList.remove("hidden");
+          signupError.classList.add("hidden");
+          signupForm.reset();
+        })
+        .catch((error) => {
+          signupError.textContent = error.message;
+          signupError.classList.remove("hidden");
+          signupMessage.classList.add("hidden");
+        });
+    });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,612 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Owner Dashboard
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+  </script>
+  <style>
+   body {
+      font-family: 'Poppins', sans-serif;
+    }
+    /* Card shadow and white background with black text */
+    .employee-card {
+      background-color: white;
+      color: black;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.06);
+      transition: box-shadow 0.3s ease;
+    }
+    .employee-card:hover {
+      box-shadow: 0 10px 15px rgba(0,0,0,0.2), 0 4px 6px rgba(0,0,0,0.1);
+    }
+    /* Override button colors inside cards */
+    .employee-card .remove-btn {
+      color: #b91c1c; /* red-700 */
+    }
+    .employee-card .remove-btn:hover {
+      color: #f87171; /* red-400 */
+    }
+    .employee-card .edit-btn {
+      color: #15803d; /* green-700 */
+    }
+    .employee-card .edit-btn:hover {
+      color: #4ade80; /* green-400 */
+    }
+  </style>
+ </head>
+ <body class="bg-white">
+  <div class="flex min-h-screen">
+   <!-- Sidebar -->
+   <aside class="bg-[#c62839] w-72 flex flex-col items-center py-8 rounded-tr-3xl rounded-br-3xl select-none">
+    <div class="flex items-center mb-10 w-full px-4">
+     <a class="text-white font-bold text-lg flex items-center" href="previous_page.html">
+      <i class="fas fa-arrow-left mr-2">
+      </i>
+      Dashboard
+     </a>
+    </div>
+    <img alt="Momms Cafe logo" class="w-36 h-36 rounded-full mb-8" height="150" src="https://storage.googleapis.com/a1aa/image/2a677ed4-7664-4f87-e3a7-fe466ee6028b.jpg" width="150"/>
+    <nav class="w-full flex flex-col gap-8 px-6">
+     <a class="text-white font-extrabold text-lg text-center uppercase hover:underline" href="ricemenu.html">
+      Overview
+     </a>
+     <a class="text-yellow-500 font-extrabold text-lg text-center uppercase hover:underline" href="emploee_page.html">
+      Employee
+     </a>
+     <a class="text-white font-extrabold text-lg text-center uppercase hover:underline" href="shawarma.html">
+      Transactions
+     </a>
+     <a class="text-white font-extrabold text-lg text-center uppercase hover:underline" href="ricemenu.html">
+      Orders
+     </a>
+     <a class="text-white font-extrabold text-lg text-center uppercase hover:underline" href="login.html">
+      Logout
+     </a>
+    </nav>
+   </aside>
+   <!-- Main content -->
+   <main class="flex flex-wrap gap-8 p-8 justify-center items-center flex-1 overflow-auto">
+    <!-- Employee Cards Container -->
+    <div class="flex flex-wrap gap-8 justify-center items-center w-full max-w-5xl my-auto" id="employee-cards">
+     <!-- Add Employee Button (initially centered) -->
+     <section class="flex flex-col items-center justify-center w-72" id="addEmployeeSection">
+      <button aria-label="Add Employee" class="bg-red-600 rounded-full w-36 h-36 flex items-center justify-center text-white text-6xl cursor-pointer" id="addEmployeeBtn">
+       +
+      </button>
+      <span class="mt-4 text-black text-lg">
+       Add Employee
+      </span>
+     </section>
+    </div>
+   </main>
+  </div>
+  <!-- Add/Edit Employee Modal -->
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50" id="addEmployeeModal">
+   <div class="bg-white rounded-md p-8 max-w-3xl w-full max-h-[90vh] overflow-auto">
+    <h2 class="text-2xl font-extrabold mb-6" id="modalTitle">
+     Add Employee
+    </h2>
+    <form action="save_employee.php" class="flex flex-wrap gap-x-8 gap-y-6" enctype="multipart/form-data" id="addEmployeeForm" method="POST">
+     <div class="flex flex-wrap gap-x-8 gap-y-6 flex-grow basis-[60%]">
+      <div class="flex flex-wrap gap-x-8 gap-y-6 w-full">
+       <div class="flex flex-col basis-1/4 min-w-[12rem]">
+        <label class="mb-1 text-base font-normal" for="firstName">
+         First Name
+        </label>
+        <input class="border border-black rounded-md px-3 py-2 text-base font-normal" id="firstName" name="firstname" required="" type="text"/>
+       </div>
+       <div class="flex flex-col basis-1/4 min-w-[12rem]">
+        <label class="mb-1 text-base font-normal" for="middleName">
+         Middle Name
+        </label>
+        <input class="border border-black rounded-md px-3 py-2 text-base font-normal" id="middleName" name="middlename" type="text"/>
+       </div>
+       <div class="flex flex-col basis-1/4 min-w-[12rem]">
+        <label class="mb-1 text-base font-normal" for="lastName">
+         Last Name
+        </label>
+        <input class="border border-black rounded-md px-3 py-2 text-base font-normal" id="lastName" name="lastname" required="" type="text"/>
+       </div>
+       <div class="flex flex-col basis-1/6 min-w-[6rem]">
+        <span class="mb-1 text-base font-normal">
+         Sex
+        </span>
+        <label class="inline-flex items-center gap-2 text-base font-normal">
+         <input name="sex" required="" type="radio" value="male"/>
+         Male
+        </label>
+        <label class="inline-flex items-center gap-2 text-base font-normal mt-1">
+         <input name="sex" required="" type="radio" value="female"/>
+         Female
+        </label>
+       </div>
+      </div>
+      <div class="flex flex-wrap gap-x-8 gap-y-6 w-full">
+       <div class="flex flex-col basis-1/4 min-w-[12rem]">
+        <label class="mb-1 text-base font-normal" for="contact">
+         Contact
+        </label>
+        <input class="border border-black rounded-md px-3 py-2 text-base font-normal" id="contact" name="contact" required="" type="text"/>
+       </div>
+       <div class="flex flex-col basis-1/4 min-w-[12rem] relative">
+        <label class="mb-1 text-base font-normal" for="dob">
+         Date of Birth
+        </label>
+        <input class="border border-black rounded-md px-3 py-2 text-base font-normal appearance-none" id="dob" name="dob" required="" type="date"/>
+        <i class="fas fa-calendar-alt absolute right-3 top-9 text-xl pointer-events-none select-none text-gray-500">
+        </i>
+       </div>
+       <div class="flex flex-col basis-1/4 min-w-[12rem]">
+        <label class="mb-1 text-base font-normal" for="email">
+         Email
+        </label>
+        <input class="border border-black rounded-md px-3 py-2 text-base font-normal" id="email" name="email" required="" type="email"/>
+       </div>
+      </div>
+      <div class="flex flex-wrap gap-x-8 gap-y-6 w-full">
+       <div class="flex flex-col basis-1/4 min-w-[12rem] relative">
+        <label class="mb-1 text-base font-normal" for="relationship">
+         Relationship
+        </label>
+        <select class="border border-black rounded-md px-3 py-2 text-base font-normal appearance-none pr-10" id="relationship" name="relationship" required="">
+         <option disabled="" selected="" value="">
+          Select
+         </option>
+         <option>
+          Single
+         </option>
+         <option>
+          Married
+         </option>
+         <option>
+          Widowed
+         </option>
+         <option>
+          Divorced
+         </option>
+        </select>
+        <i class="fas fa-chevron-down absolute right-3 top-9 text-xl pointer-events-none select-none text-black">
+        </i>
+       </div>
+       <div class="flex flex-col basis-1/4 min-w-[12rem] relative">
+        <label class="mb-1 text-base font-normal" for="nationality">
+         Nationality
+        </label>
+        <select class="border border-black rounded-md px-3 py-2 text-base font-normal appearance-none pr-10" id="nationality" name="nationality" required="">
+         <option disabled="" selected="" value="">
+          Select
+         </option>
+         <option>
+          Filipino
+         </option>
+         <option>
+          American
+         </option>
+         <option>
+          Other
+         </option>
+        </select>
+        <i class="fas fa-chevron-down absolute right-3 top-9 text-xl pointer-events-none select-none text-black">
+        </i>
+       </div>
+       <div class="flex flex-col basis-1/4 min-w-[12rem] relative">
+        <label class="mb-1 text-base font-normal" for="role">
+         Role
+        </label>
+        <select class="border border-black rounded-md px-3 py-2 text-base font-normal appearance-none pr-10" id="role" name="role" required="">
+         <option disabled="" selected="" value="">
+          Select
+         </option>
+         <option>
+          Cashier
+         </option>
+         <option>
+          Waiter
+         </option>
+         <option>
+          Chef
+         </option>
+         <option>
+          Manager
+         </option>
+        </select>
+        <i class="fas fa-chevron-down absolute right-3 top-9 text-xl pointer-events-none select-none text-black">
+        </i>
+       </div>
+       <div class="flex flex-col basis-1/4 min-w-[12rem] relative">
+        <label class="mb-1 text-base font-normal" for="employmentType">
+         Type of Employment
+        </label>
+        <select class="border border-black rounded-md px-3 py-2 text-base font-normal appearance-none pr-10" id="employmentType" name="employment_type" required="">
+         <option disabled="" selected="" value="">
+          Select
+         </option>
+         <option>
+          Full-time
+         </option>
+         <option>
+          Part-time
+         </option>
+         <option>
+          Contractual
+         </option>
+        </select>
+        <i class="fas fa-chevron-down absolute right-3 top-9 text-xl pointer-events-none select-none text-black">
+        </i>
+       </div>
+      </div>
+      <div class="flex flex-wrap gap-x-8 gap-y-6 w-full">
+       <div class="flex flex-col basis-2/3 min-w-[20rem] relative">
+        <label class="mb-1 text-base font-normal" for="address">
+         Address
+        </label>
+        <textarea class="border border-black rounded-md px-3 py-2 text-base font-normal resize-y" id="address" name="address" required="" rows="4"></textarea>
+        <i class="fas fa-pen absolute bottom-3 right-3 text-xl pointer-events-none select-none text-black">
+        </i>
+       </div>
+       <div class="flex flex-col basis-1/6 min-w-[12rem]">
+        <label class="mb-1 text-base font-normal" for="branch">
+         Branch
+        </label>
+        <input class="border border-black rounded-md px-3 py-2 text-base font-normal" id="branch" name="branch" required="" type="text"/>
+       </div>
+       <div class="flex flex-col basis-1/6 min-w-[12rem] relative">
+        <label class="mb-1 text-base font-normal" for="doe">
+         Date of Employment
+        </label>
+        <input class="border border-black rounded-md px-3 py-2 text-base font-normal appearance-none" id="doe" name="date_of_employment" required="" type="date"/>
+        <i class="fas fa-calendar-alt absolute right-3 top-9 text-xl pointer-events-none select-none text-gray-500">
+        </i>
+       </div>
+      </div>
+     </div>
+     <div class="flex flex-col items-center justify-start basis-[30%] min-w-[14rem]">
+      <label class="border border-red-900 rounded-full p-8 flex items-center justify-center relative cursor-pointer select-none w-40 h-40" for="employeeImage">
+       <img alt="Upload Icon" class="w-24 h-24 object-cover rounded-full" height="96" id="previewImage" src="https://storage.googleapis.com/a1aa/image/6ed270b3-e15e-4871-2e20-8ede2714b917.jpg" width="96"/>
+       <input accept="image/*" class="hidden" id="employeeImage" name="employee_image" type="file"/>
+      </label>
+      <p class="mt-3 text-red-600 italic text-center text-sm font-semibold max-w-[160px]">
+       *Upload picture required
+      </p>
+     </div>
+     <div class="flex justify-between w-full mt-10 gap-x-6 flex-wrap">
+      <button class="bg-red-900 text-white font-semibold rounded-md px-16 py-3" id="cancelBtn" type="button">
+       Cancel
+      </button>
+      <button class="bg-red-900 text-white font-semibold rounded-md px-16 py-3" type="reset">
+       Reset
+      </button>
+      <button class="bg-green-600 text-white font-semibold rounded-md px-16 py-3" type="submit">
+       Save
+      </button>
+     </div>
+    </form>
+   </div>
+  </div>
+  <script>
+   // Modal elements
+    const addEmployeeBtn = document.getElementById('addEmployeeBtn');
+    const addEmployeeModal = document.getElementById('addEmployeeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const addEmployeeForm = document.getElementById('addEmployeeForm');
+    const employeeCardsContainer = document.getElementById('employee-cards');
+    const previewImage = document.getElementById('previewImage');
+    const employeeImageInput = document.getElementById('employeeImage');
+    const addEmployeeSection = document.getElementById('addEmployeeSection');
+    const modalTitle = document.getElementById('modalTitle');
+
+    let employeeIdCounter = 1; // Start from 1
+    let editCard = null; // Track card being edited
+
+    // Show modal for add
+    addEmployeeBtn.addEventListener('click', () => {
+      modalTitle.textContent = 'Add Employee';
+      editCard = null;
+      addEmployeeForm.reset();
+      previewImage.src = "https://storage.googleapis.com/a1aa/image/6ed270b3-e15e-4871-2e20-8ede2714b917.jpg";
+      addEmployeeModal.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Hide modal with confirmation on cancel
+    cancelBtn.addEventListener('click', () => {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Your changes will be lost!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, cancel',
+        cancelButtonText: 'No, continue editing',
+        confirmButtonColor: '#22c55e',
+        cancelButtonColor: '#ef4444'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          addEmployeeModal.classList.add('hidden');
+          addEmployeeForm.reset();
+          previewImage.src = "https://storage.googleapis.com/a1aa/image/6ed270b3-e15e-4871-2e20-8ede2714b917.jpg";
+          editCard = null;
+        }
+      });
+    });
+
+    // Preview image on file select
+    employeeImageInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          previewImage.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        previewImage.src = "https://storage.googleapis.com/a1aa/image/6ed270b3-e15e-4871-2e20-8ede2714b917.jpg";
+      }
+    });
+
+    // Remove button handler with confirmation
+    employeeCardsContainer.addEventListener('click', e => {
+      if (e.target.classList.contains('remove-btn')) {
+        const card = e.target.closest('section.employee-card');
+        if (!card) return;
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "This employee will be removed!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, remove',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: '#22c55e',
+          cancelButtonColor: '#ef4444'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            card.remove();
+            checkAddButtonPosition();
+            Swal.fire({
+              icon: 'success',
+              title: 'Removed!',
+              text: 'Employee has been removed.',
+              confirmButtonColor: '#22c55e'
+            });
+          }
+        });
+      }
+      // Edit button handler
+      if (e.target.classList.contains('edit-btn')) {
+        const card = e.target.closest('section.employee-card');
+        if (!card) return;
+        editCard = card;
+        modalTitle.textContent = 'Edit Employee';
+
+        // Fill form with existing data
+        const fullName = card.querySelector('p.text-lg').textContent.trim();
+        const roleText = card.querySelector('p.text-center').textContent.trim();
+        const statusText = card.querySelector('span.font-semibold').textContent.trim();
+        const imgSrc = card.querySelector('img').src;
+
+        // Parse full name into parts (simple split)
+        const nameParts = fullName.split(' ');
+        document.getElementById('firstName').value = nameParts[0] || '';
+        if(nameParts.length === 3) {
+          document.getElementById('middleName').value = nameParts[1];
+          document.getElementById('lastName').value = nameParts[2];
+        } else if(nameParts.length === 2) {
+          document.getElementById('middleName').value = '';
+          document.getElementById('lastName').value = nameParts[1];
+        } else {
+          document.getElementById('middleName').value = '';
+          document.getElementById('lastName').value = '';
+        }
+
+        // Role select
+        const roleSelect = document.getElementById('role');
+        for (let option of roleSelect.options) {
+          option.selected = option.text === roleText.replace('Role: ', '');
+        }
+
+        // Employment type select
+        const empTypeSelect = document.getElementById('employmentType');
+        for (let option of empTypeSelect.options) {
+          option.selected = option.text === statusText;
+        }
+
+        // Reset other fields (you can extend this to store more data if needed)
+        addEmployeeForm.sex.value = '';
+        document.getElementById('contact').value = '';
+        document.getElementById('dob').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('relationship').value = '';
+        document.getElementById('nationality').value = '';
+        document.getElementById('address').value = '';
+        document.getElementById('branch').value = '';
+        document.getElementById('doe').value = '';
+
+        previewImage.src = imgSrc;
+
+        addEmployeeModal.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    // Check and update Add Employee button position and container alignment
+    function checkAddButtonPosition() {
+      const employeeCards = employeeCardsContainer.querySelectorAll('section.employee-card');
+      if (employeeCards.length === 0) {
+        // No employees, center the add button container
+        addEmployeeSection.classList.remove('w-72');
+        addEmployeeSection.classList.add('w-full', 'flex', 'justify-center');
+      } else {
+        // Employees exist, place add button beside employees
+        addEmployeeSection.classList.remove('w-full', 'flex', 'justify-center');
+        addEmployeeSection.classList.add('w-72');
+      }
+      // Always append addEmployeeSection as last child to keep order
+      employeeCardsContainer.appendChild(addEmployeeSection);
+    }
+
+    // Check if employee already exists by full name (case insensitive)
+    function employeeExists(fullName) {
+      const employeeCards = employeeCardsContainer.querySelectorAll('section.employee-card p.text-lg');
+      return Array.from(employeeCards).some(p => p.textContent.trim().toLowerCase() === fullName.toLowerCase());
+    }
+
+    // Form submit handler for add/edit with server POST
+    addEmployeeForm.addEventListener('submit', e => {
+      e.preventDefault();
+
+      // Validate required fields
+      const firstName = document.getElementById('firstName').value.trim();
+      const middleName = document.getElementById('middleName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const sex = addEmployeeForm.sex.value;
+      const contact = document.getElementById('contact').value.trim();
+      const dob = document.getElementById('dob').value;
+      const email = document.getElementById('email').value.trim();
+      const relationship = document.getElementById('relationship').value;
+      const nationality = document.getElementById('nationality').value;
+      const role = document.getElementById('role').value;
+      const employmentType = document.getElementById('employmentType').value;
+      const address = document.getElementById('address').value.trim();
+      const branch = document.getElementById('branch').value.trim();
+      const doe = document.getElementById('doe').value;
+      const imageFile = employeeImageInput.files[0];
+
+      if (!firstName || !lastName || !sex || !contact || !dob || !email || !relationship || !nationality || !role || !employmentType || !address || !branch || !doe || (!imageFile && !editCard)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Missing fields',
+          text: 'Please fill all required fields and upload a picture.'
+        });
+        return;
+      }
+
+      const fullName = middleName ? `${firstName} ${middleName} ${lastName}` : `${firstName} ${lastName}`;
+
+      // Check for duplicate if adding new employee or editing to a new name
+      if ((!editCard || (editCard && editCard.querySelector('p.text-lg').textContent.trim().toLowerCase() !== fullName.toLowerCase())) && employeeExists(fullName)) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Duplicate Employee',
+          text: 'This employee already exists.',
+          confirmButtonColor: '#22c55e'
+        });
+        return;
+      }
+
+      function createOrUpdateCard(imageUrl) {
+        if (editCard) {
+          // Update existing card
+          editCard.querySelector('p.text-lg').textContent = fullName;
+          editCard.querySelector('p.text-center').textContent = `Role: ${role}`;
+          editCard.querySelector('span.font-semibold').textContent = employmentType;
+          editCard.querySelector('img').src = imageUrl;
+          Swal.fire({
+            icon: 'success',
+            title: 'Employee Updated',
+            text: `${fullName} has been updated successfully.`,
+            confirmButtonColor: '#22c55e'
+          });
+        } else {
+          // Create new employee card
+          const card = document.createElement('section');
+          card.className = 'employee-card rounded-md p-6 w-72 flex flex-col items-center space-y-6';
+
+          card.innerHTML = `
+            <h2 class="font-extrabold text-xl self-start">ID#${employeeIdCounter}</h2>
+            <img alt="Portrait of ${fullName}" class="w-36 h-36 rounded-full object-cover" src="${imageUrl}" />
+            <p class="text-lg">${fullName}</p>
+            <p class="text-lg text-center">Role: ${role}</p>
+            <p class="text-lg text-center">
+              Status:
+              <span class="font-semibold">${employmentType}</span>
+            </p>
+            <div class="self-start flex space-x-4">
+              <button class="text-lg remove-btn font-semibold">Remove</button>
+              <button class="text-lg edit-btn font-semibold">Edit</button>
+            </div>
+          `;
+
+          employeeCardsContainer.insertBefore(card, addEmployeeSection);
+          employeeIdCounter++;
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Employee Added',
+            text: `${fullName} has been added successfully.`,
+            confirmButtonColor: '#22c55e'
+          });
+        }
+        // Close modal and reset form
+        addEmployeeModal.classList.add('hidden');
+        addEmployeeForm.reset();
+        previewImage.src = "https://storage.googleapis.com/a1aa/image/6ed270b3-e15e-4871-2e20-8ede2714b917.jpg";
+        editCard = null;
+        checkAddButtonPosition();
+      }
+
+      // Prepare form data for server
+      const formData = new FormData();
+      formData.append('firstname', firstName);
+      formData.append('middlename', middleName);
+      formData.append('lastname', lastName);
+      formData.append('sex', sex);
+      formData.append('contact', contact);
+      formData.append('dob', dob);
+      formData.append('email', email);
+      formData.append('relationship', relationship);
+      formData.append('nationality', nationality);
+      formData.append('role', role);
+      formData.append('employment_type', employmentType);
+      formData.append('address', address);
+      formData.append('branch', branch);
+      formData.append('date_of_employment', doe);
+      if (imageFile) {
+        formData.append('employee_image', imageFile);
+      }
+
+      fetch('save_employee.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+        // You can parse JSON if your PHP returns JSON, here we just alert text
+        if (data.toLowerCase().includes('success')) {
+          if (imageFile) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+              createOrUpdateCard(event.target.result);
+            };
+            reader.readAsDataURL(imageFile);
+          } else if (editCard) {
+            const existingImageSrc = editCard.querySelector('img').src;
+            createOrUpdateCard(existingImageSrc);
+          }
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: data
+          });
+        }
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'An error occurred while saving employee data.'
+        });
+        console.error('Error:', error);
+      });
+    });
+
+    // Initial check on page load
+    checkAddButtonPosition();
+  </script>
+ </body>
+</html>
