@@ -1,0 +1,245 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MOMMS Cafe - Rice Meals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .order-panel {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .order-summary {
+            position: absolute;
+            bottom: 80px; /* Space above the button */
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background-color: white;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+        .order-button {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            padding: 12px 0;
+            background-color: #2ecc71;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .order-button:hover {
+            background-color: #27ae60;
+        }
+        /* Modern table styles with alternating row colors */
+        #transactionsContent table {
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            width: 100%;
+        }
+        #transactionsContent thead tr {
+            background-color: transparent;
+        }
+        #transactionsContent thead th {
+            background-color: transparent;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568; /* Tailwind gray-700 */
+            border-bottom: 2px solid #e2e8f0; /* Tailwind gray-300 */
+        }
+        #transactionsContent tbody tr {
+            background-color: white;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+            border-radius: 0.5rem;
+            transition: box-shadow 0.3s ease;
+        }
+        #transactionsContent tbody tr:nth-child(even) {
+            background-color: #f7fafc; /* Tailwind gray-50 */
+        }
+        #transactionsContent tbody tr:hover {
+            box-shadow: 0 4px 8px rgb(0 0 0 / 0.15);
+        }
+        #transactionsContent tbody td {
+            padding: 12px 16px;
+            vertical-align: middle;
+            border: none;
+        }
+        /* Rounded corners on first and last cells */
+        #transactionsContent tbody tr td:first-child {
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+        }
+        #transactionsContent tbody tr td:last-child {
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+        /* Nav links underline on hover */
+        aside nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="bg-[#c62839] w-72 flex flex-col items-center py-8 rounded-tr-3xl rounded-br-3xl select-none">
+            <div class="flex items-center mb-10 w-full px-4">
+                <a href="previous_page.html" class="text-white font-bold text-lg flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i> Dashboard
+                </a>
+            </div>
+            <img alt="Momms Cafe logo" class="w-36 h-36 rounded-full mb-8" height="150" src="LOGO.png" width="150" />
+            <nav class="w-full flex flex-col gap-8 px-6">
+                <a class="text-yellow-500 font-extrabold text-lg text-center uppercase hover:underline" href="ricemenu.html">Overview</a>
+                <a class="text-white font-extrabold text-lg text-center uppercase hover:underline" href="employee_page.html">Profile</a>
+                <a class="text-white font-extrabold text-lg text-center uppercase hover:underline" href="transaction.html">Transactions</a>
+                <a class="text-white font-extrabold text-lg text-center uppercase hover:underline" href="ricemenu.html">Orders</a>
+                <a class="text-white font-extrabold text-lg text-center uppercase hover:underline" href="login.html">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="flex flex-col gap-6 relative flex-1 p-8">
+            <!-- Header -->
+            <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <p class="text-sm text-gray-700" id="welcomeText">Welcome Back!</p>
+                </div>
+                <div class="flex items-center gap-4 w-full sm:w-auto" id="headerActions">
+                    <button id="uploadBtn" class="bg-[#c62839] text-white font-semibold rounded-lg px-5 py-2 flex items-center gap-2 whitespace-nowrap">
+                        <i class="fas fa-upload"></i>
+                        Upload Product
+                    </button>
+                    <div class="relative flex items-center bg-white rounded-lg px-4 py-2 w-full max-w-xs">
+                        <input class="outline-none text-sm text-gray-500 w-full bg-transparent" placeholder="Search" type="search" />
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content area -->
+            <section id="dashboardContent" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left and center stats -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:col-span-2">
+                    <!-- Total Product -->
+                    <div class="bg-white p-5 relative h-40">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-5 h-5 bg-[#c62839] rounded-sm"></div>
+                            <p class="font-semibold text-gray-800 text-sm">Total Product</p>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-3xl font-extrabold text-gray-800">1,134</h3>
+                            <p class="text-gray-500 text-sm ml-2">Items</p>
+                        </div>
+                        <p class="text-[#2ecc71] text-xs mt-2">+10% this week</p>
+                    </div>
+                    <!-- Total Earning -->
+                    <div class="bg-white p-5 relative h-40">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-5 h-5 bg-[#c62839] rounded-sm"></div>
+                            <p class="font-semibold text-gray-800 text-sm">Total Earning</p>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-3xl font-extrabold text-gray-800">$4,231</h3>
+                        </div>
+                        <p class="text-[#e74c6f] text-xs mt-2">-22% this week</p>
+                    </div>
+                    <!-- Latest Sales -->
+                    <div class="bg-white p-5 sm:col-span-2 relative" style="margin-top:-200px">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-5 h-5 bg-[#c62839] rounded-sm"></div>
+                            <p class="font-semibold text-gray-800 text-sm">Latest Sales</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right side top products and balances -->
+                <div class="flex flex-col gap-6">
+                    <!-- Best Foods -->
+                    <section class="bg-white p-5">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-5 h-5 bg-[#c62839] rounded-sm"></div>
+                            <h3 class="font-semibold text-gray-800 text-sm">Best Foods</h3>
+                        </div>
+                        <ul class="flex flex-col gap-4 text-sm text-gray-700">
+                            <li class="flex items-center gap-3">
+                                <img alt="Blue 3D icon illustration" class="w-10 h-10 rounded-lg" height="40" src="beefburger.jpg" width="40" />
+                                <div class="flex-1">
+                                    <p class="font-semibold text-gray-800">Beef Burger</p>
+                                    <p class="text-xs text-gray-400">Burgers</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <img alt="Orange 3D icon illustration" class="w-10 h-10 rounded-lg" height="40" src="hotdog.jpg" width="40" />
+                                <div class="flex-1">
+                                    <p class="font-semibold text-gray-800">Cheesey Bomb</p>
+                                    <p class="text-xs text-gray-400">Takoyaki</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <img alt="Green 3D cube illustration" class="w-10 h-10 rounded-lg" height="40" src="sisig.jpg" width="40" />
+                                <div class="flex-1">
+                                    <p class="font-semibold text-gray-800">Sisilog</p>
+                                    <p class="text-xs text-gray-400">Rice Meals</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <img alt="Orange 3D head illustration" class="w-10 h-10 rounded-lg" height="40" src="ice coffee.jpg" width="40" />
+                                <div class="flex-1">
+                                    <p class="font-semibold text-gray-800">Ice Coffee</p>
+                                    <p class="text-xs text-gray-400">Drinks </p>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <img alt="Astro illustration with helmet" class="w-10 h-10 rounded-lg" height="40" src="Siomai_sa_Tisa.jpg" width="40" />
+                                <div class="flex-1">
+                                    <p class="font-semibold text-gray-800">Siomai</p>
+                                    <p class="text-xs text-gray-400">Finger Foods</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section class="bg-white p-5 relative">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-5 h-5 bg-[#c62839] rounded-sm"></div>
+                            <h3 class="font-semibold text-gray-800 text-sm">Orders</h3>
+                            <i class="fas fa-ellipsis-v text-gray-400 ml-auto cursor-pointer"></i>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-center flex-1">
+                                <p class="text-3xl font-extrabold text-gray-800">537</p>
+                                <p class="text-xs text-[#d1f7e6] bg-[#d1f7e6] rounded-md text-green-600 inline-block px-2 py-1 mt-1 select-none">Completed</p>
+                            </div>
+                            <div class="border-l border-gray-300 h-12 mx-4"></div>
+                            <div class="text-center flex-1">
+                                <p class="text-3xl font-extrabold text-gray-800">234</p>
+                                <p class="text-xs text-[#fbdada] bg-[#fbdada] rounded-md text-red-400 inline-block px-2 py-1 mt-1 select-none">Pending</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

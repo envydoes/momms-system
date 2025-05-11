@@ -1,0 +1,284 @@
+/* GENERAL STYLES */
+body {
+    font-family: "Century Gothic", 'Lato', sans-serif;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  
+  /* HERO SECTIONS */
+  .et-hero-tabs,
+  .et-slide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    background: #781f1f;
+    text-align: center;
+    padding: 0 2em;
+  }
+  
+  .et-hero-tabs h1,
+  .et-slide h1 {
+    font-size: 3rem;
+    margin: 0;
+    letter-spacing: 1rem;
+  }
+  
+  .et-hero-tabs h3,
+  .et-slide h3 {
+    font-size: 1.2rem;
+    letter-spacing: 0.3rem;
+    opacity: 0.6;
+  }
+  
+  /* NAVIGATION TABS */
+  .et-hero-tabs-container {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+  }
+  
+  .et-hero-tab {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    letter-spacing: 0.1rem;
+    font-size: 1rem;
+    transition: all 0.5s ease;
+  }
+  
+  .et-hero-tab:hover {
+    background: rgba(102,177,241,0.8);
+    color: white;
+  }
+  
+  /* SLIDER UNDER TAB */
+  .et-hero-tab-slider {
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 6px;
+    background: #66B1F1;
+    transition: left 0.3s ease;
+  }
+  
+  /* MENU GRID */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    padding: 50px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .menu-item {
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.2);
+    padding: 20px;
+    text-align: center;
+    transition: 0.4s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 300px;
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  .menu-item:hover {
+    transform: translateY(-10px);
+    background: #f1f1f1;
+  }
+  
+  .menu-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px;
+  }
+  
+  .menu-item h2 {
+    margin-top: 20px;
+    font-size: 1.5rem;
+  }
+  
+  /* QUANTITY CONTROLS */
+  .quantity-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .quantity-control button {
+    width: 40px;
+    height: 40px;
+    background: #ff6b6b;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  
+  .quantity-control button:hover {
+    background: #ff4c4c;
+  }
+  
+  .quantity-control button:active {
+    transform: scale(0.9);
+  }
+  
+  .quantity-control .quantity {
+    font-size: 20px;
+    font-weight: bold;
+    width: 40px;
+    text-align: center;
+  }
+  
+  /* ADD TO ORDER BUTTON */
+  .order-button-container {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 50px;
+  }
+  
+  #addOrderBtn {
+    background-color: #28a745;
+    color: white;
+    padding: 18px 50px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: background 0.3s, transform 0.2s;
+  }
+  
+  #addOrderBtn:hover {
+    background-color: #218838;
+  }
+  
+  #addOrderBtn:active {
+    transform: scale(0.95);
+  }
+  
+  /* ORDER LIST DISPLAY */
+  .order-list {
+    width: 80%;
+    max-width: 800px;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .order-item {
+    background: #fff;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .order-item h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+  
+  .order-actions button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .order-actions .edit-btn {
+    background-color: #ffc107;
+    color: white;
+  }
+  
+  .order-actions .remove-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  /* RESPONSIVE DESIGN */
+  @media (max-width: 900px) {
+    .menu-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .menu-grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+/* MOMMS NAVIGATION BAR */
+.momms-navbar {
+  width: 100%;
+  height: 70px;
+  background: #fff;
+  box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  
+  left: 0;
+  z-index: 100;
+}
+
+.momms-logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  text-decoration: none;
+  letter-spacing: 2px;
+  transition: color 0.3s;
+}
+
+.momms-logo:hover {
+  color: #781f1f;
+}
+
+.back-button {
+  background: transparent;
+  color: #781f1f;
+  border: 2px solid #781f1f;
+  padding: 8px 18px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.back-button:hover {
+  background: #781f1f;
+  color: white;
+}

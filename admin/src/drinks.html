@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drinks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet"/>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        .order-panel {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: relative;
+        }
+    
+        #cartItems {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+    
+        .order-summary {
+            padding: 10px;
+            background-color: white;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+    
+        .order-button {
+            padding: 12px 0;
+            background-color: #2ecc71;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+    
+        .order-button:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="bg-[#c62839] w-72 flex flex-col items-center py-8 rounded-tr-3xl rounded-br-3xl select-none">
+            <div class="flex items-center mb-10 w-full px-4">
+                <a href="previous_page.html" class="text-white font-bold text-lg flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i> Dashboard
+                </a>
+            </div>
+            <img alt="Momms Cafe logo" class="w-36 h-36 rounded-full mb-8" height="150" src="LOGO.png" width="150"/>
+            <nav class="w-full flex flex-col gap-8 px-6">
+                <a class="text-white font-extrabold text-lg text-center uppercase" href="ricemenu.html">Rice Meals</a>
+                <a class="text-white font-extrabold text-lg text-center uppercase" href="sizz.html">Sizzling Meals</a>
+                <a class="text-white font-extrabold text-lg text-center uppercase" href="shawarma.html">Shawarma</a>
+                <a class="text-white font-extrabold text-lg text-center uppercase" href="burger.html">Burgers</a>
+                <a class="text-white font-extrabold text-lg text-center uppercase" href="takoyaki.html">Takoyaki</a>
+                <a class="text-white font-extrabold text-lg text-center uppercase" href="finger_foods.html">Finger Foods</a>
+                <a class="text-white font-extrabold text-lg text-center uppercase" href="pizza.html">Pizza</a>
+                <a class="text-yellow-500 font-extrabold text-lg text-center uppercase" href="drinks.html">Drinks</a>
+            </nav>
+        </aside>
+        
+        <!-- Main content -->
+        <main class="flex-1 p-8">
+            <header class="mb-6">
+                <h1 class="text-2xl font-extrabold text-black mb-1">MOMMS CAFE</h1>
+                <p class="text-gray-600 text-sm">Friday, 21 Feb 2025</p>
+            </header>
+            <section class="mb-6">
+                <h2 class="text-xl font-extrabold underline underline-offset-4 mb-6">DRINKS</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 max-w-5xl">
+                    <!-- Product 1 -->
+                    <div class="flex flex-col items-center">
+                        <img alt="Americano Coffee" class="w-24 h-24 rounded-xl border border-gray-400 mb-2" height="100" src="americano.jpg" width="100"/>
+                        <p class="text-center font-semibold text-black text-sm">Americano Coffee</p>
+                        <p class="text-center font-bold text-green-700 text-xs mb-2">₱60.00</p>
+                        <button onclick="addToCart('Americano Coffee', 60)" class="bg-red-500 text-white text-xs rounded-md px-4 py-2 shadow-md hover:bg-red-600 transition">
+                            Add Product
+                        </button>
+                    </div>
+                    <!-- Product 2 -->
+                    <div class="flex flex-col items-center">
+                        <img alt="Coffee Latte" class="w-24 h-24 rounded-xl border border-gray-400 mb-2" height="100" src="latte-small.jpg" width="100"/>
+                        <p class="text-center font-semibold text-black text-sm">Coffee Latte</p>
+                        <p class="text-center font-bold text-green-700 text-xs mb-2">₱70.00</p>
+                        <button onclick="addToCart('Coffee Latte', 70)" class="bg-red-500 text-white text-xs rounded-md px-4 py-2 shadow-md hover:bg-red-600 transition">
+                            Add Product
+                        </button>
+                    </div>
+                    <!-- Product 3 -->
+                    <div class="flex flex-col items-center">
+                        <img alt="Ice Coffee" class="w-24 h-24 rounded-xl border border-gray-400 mb-2" height="100" src="ice coffee.jpg" width="100"/>
+                        <p class="text-center font-semibold text-black text-sm">Ice Coffee</p>
+                        <p class="text-center font-bold text-green-700 text-xs mb-2">₱40.00</p>
+                        <button onclick="addToCart('Ice Coffee', 40)" class="bg-red-500 text-white text-xs rounded-md px-4 py-2 shadow-md hover:bg-red-600 transition">
+                            Add Product
+                        </button>
+                    </div>
+                    <!-- Product 4 -->
+                    <div class="flex flex-col items-center">
+                        <img alt="Caramel Coffee" class="w-24 h-24 rounded-xl border border-gray-400 mb-2" height="100" src="Salted-Caramel-Coffee-1.jpg" width="100"/>
+                        <p class="text-center font-semibold text-black text-sm">Caramel Coffee</p>
+                        <p class="text-center font-bold text-green-700 text-xs mb-2">₱70.00</p>
+                        <button onclick="addToCart('PCaramel Coffee', 70)" class="bg-red-500 text-white text-xs rounded-md px-4 py-2 shadow-md hover:bg-red-600 transition">
+                            Add Product
+                        </button>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img alt="Chocolate Milk Tea" class="w-24 h-24 rounded-xl border border-gray-400 mb-2" height="100" src="chocolate.jpg" width="100"/>
+                        <p class="text-center font-semibold text-black text-sm">Chocolate Milk Tea</p>
+                        <p class="text-center font-bold text-green-700 text-xs mb-2">₱80.00</p>
+                        <button onclick="addToCart('Chocolate Milk Tea', 80)" class="bg-red-500 text-white text-xs rounded-md px-4 py-2 shadow-md hover:bg-red-600 transition">
+                            Add Product
+                        </button>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img alt="Taro Milk Tea" class="w-24 h-24 rounded-xl border border-gray-400 mb-2" height="100" src="taro.png" width="100"/>
+                        <p class="text-center font-semibold text-black text-sm">Taro Milk Tea</p>
+                        <p class="text-center font-bold text-green-700 text-xs mb-2">₱80.00</p>
+                        <button onclick="addToCart('Taro Milk Tea', 80)" class="bg-red-500 text-white text-xs rounded-md px-4 py-2 shadow-md hover:bg-red-600 transition">
+                            Add Product
+                        </button>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img alt="Vannila Milk Tea" class="w-24 h-24 rounded-xl border border-gray-400 mb-2" height="100" src="vannila.jpg" width="100"/>
+                        <p class="text-center font-semibold text-black text-sm">Vannila Milk Tea</p>
+                        <p class="text-center font-bold text-green-700 text-xs mb-2">₱80.00</p>
+                        <button onclick="addToCart('Vannila Milk Tea', 80)" class="bg-red-500 text-white text-xs rounded-md px-4 py-2 shadow-md hover:bg-red-600 transition">
+                            Add Product
+                        </button>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <img alt="Red Velvet Milk Tea" class="w-24 h-24 rounded-xl border border-gray-400 mb-2" height="100" src="red-velvet.jpeg" width="100"/>
+                        <p class="text-center font-semibold text-black text-sm">Red Velvet Milk Tea</p>
+                        <p class="text-center font-bold text-green-700 text-xs mb-2">₱80.00</p>
+                        <button onclick="addToCart('Red Velvet Milk Tea', 80)" class="bg-red-500 text-white text-xs rounded-md px-4 py-2 shadow-md hover:bg-red-600 transition">
+                            Add Product
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Orders panel (Right Sidebar) -->
+        <aside class="w-96 border-l border-black shadow-lg p-6 order-panel">
+            <div class="flex flex-col flex-1 overflow-hidden">
+                <h2 class="text-xl font-bold mb-4">Your Cart</h2>
+                <div id="cartItems" class="flex flex-col gap-4">
+                    <!-- Cart items will be shown here -->
+                </div>
+                <div class="order-summary">
+                    <p class="font-semibold text-black">Total Price: ₱<span id="totalPrice">0.00</span></p>
+                </div>
+            </div>
+            <button onclick="placeOrder()" class="order-button mt-4" id="buy-btn">
+                Order Now
+            </button>
+        </aside>
+    </div>
+
+    <script>
+	
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// Function to add a product to the cart (NO Swal here anymore)
+function addToCart(name, price, quantity = 1) {
+    const existingItem = cart.find(item => item.name === name);
+    if (existingItem) {
+        existingItem.quantity += quantity; // Increase quantity
+    } else {
+        cart.push({ name, price, quantity }); // Add new item
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    showCart(); // Just update cart display (no popups)
+}
+
+// Display cart items
+function showCart() {
+    const cartItemsDiv = document.getElementById('cartItems');
+    cartItemsDiv.innerHTML = '';
+
+    if (cart.length === 0) {
+        cartItemsDiv.innerHTML = '<p class="text-gray-400 text-sm text-center">No items yet.</p>';
+        document.getElementById('totalPrice').innerText = '0.00';
+        return;
+    }
+
+    let total = 0;
+    cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        cartItemsDiv.innerHTML += `
+            <div class="flex justify-between items-center p-2 bg-gray-100 rounded shadow-sm">
+                <div>
+                    <p class="font-semibold text-black">${item.name} x${item.quantity}</p>
+                    <p class="text-green-600 text-sm font-bold">₱${itemTotal.toFixed(2)}</p>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <button onclick="updateQuantity(${index}, 'decrease')" class="text-xs text-white bg-gray-500 rounded-full px-2 py-1">-</button>
+                    <span class="text-xs font-semibold">${item.quantity}</span>
+                    <button onclick="updateQuantity(${index}, 'increase')" class="text-xs text-white bg-gray-500 rounded-full px-2 py-1">+</button>
+                    <button onclick="removeItem(${index})" class="text-red-600 text-xs font-bold">Remove</button>
+                </div>
+            </div>
+        `;
+    });
+
+    document.getElementById('totalPrice').innerText = total.toFixed(2);
+}
+
+// Update item quantity
+function updateQuantity(index, action) {
+    if (action === 'increase') {
+        cart[index].quantity += 1;
+    } else if (action === 'decrease' && cart[index].quantity > 1) {
+        cart[index].quantity -= 1;
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    showCart();
+}
+
+// Remove item from cart
+function removeItem(index) {
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    showCart();
+}
+
+// Place order with confirmation
+function placeOrder() {
+    if (cart.length === 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cart is empty!',
+            text: 'Please add items before placing an order.',
+            confirmButtonColor: '#f27474'
+        });
+        return;
+    }
+
+    // Confirmation before placing the order
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You are about to place the order. You can still edit your cart if you want.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Place Order',
+        cancelButtonText: 'No, Edit Cart',
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#f27474'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Proceed with placing the order
+            fetch('place_order.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(cart)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order Placed!',
+                        text: 'Your order was successfully placed!',
+                        confirmButtonColor: '#28a745'
+                    });
+                    localStorage.removeItem('cart');
+                    cart = [];
+                    showCart();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Order Failed!',
+                        text: data.message || 'Something went wrong!',
+                        confirmButtonColor: '#f27474'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Network Error!',
+                    text: error.toString(),
+                    confirmButtonColor: '#f27474'
+                });
+            });
+        }
+    });
+}
+
+// Initial display of cart when the page loads
+window.onload = function() {
+    showCart();
+};
+</script>
+
+
+</body>
+</html>
